@@ -14,9 +14,8 @@ class WeatherApp extends Component {
         this.findCurrLoc();
     }
 
-    handleFilter = async (ev, val) => {
+    handleFilter = async (val) => {
         this.setState({ isCurrLoc: false })
-        ev.preventDefault();
         const loc = { city: val };
         this.props.loadWeatherData(loc);
     }
