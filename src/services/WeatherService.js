@@ -8,21 +8,33 @@ export default {
 }
 
 async function getForecasts(loc) {
-    console.log('weather service got loc', loc);
     const res = await axios.get(`${baseUrl}?q=${loc}&units=metric&appid=${API_KEY}`);
-    const forecasts = res.data.list.map((i, idx) => {
-        const weather = {
-            date: new Date(i.dt * 1000).toLocaleDateString('en-GB'),
-            hour: new Date(i.dt * 1000).toLocaleTimeString('en-GB'),
-            desc: i.weather[0].description
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const forecasts = [];
+    res.data.list.forEach(i => {
+        const time = new Date(i.dt * 1000);
+        const date = time.toLocaleDateString('en-GB');
+        var dateIdx = forecasts.findIndex(f => f.date === date)
+        if (dateIdx === -1) {
+            forecasts.push(
+                {
+                    date,
+                    day: days[time.getDay()],
+                    weathers: []
+                }
+            )
+            dateIdx = forecasts.length - 1;
         }
-        weather.icon = `http://openweathermap.org/img/wn/${i.weather[0].icon}@2x.png`
-        if (idx === 0) {
-            weather.tempNow = i.main.temp;
-            weather.feelsLike = i.main.feels_like;
-        }
-        return weather;
+        forecasts[dateIdx].weathers.push(
+            {
+                hour: time.toLocaleTimeString('en-GB').substring(0, 5),
+                temp: Math.round(i.main.temp),
+                desc: i.weather[0].description,
+                icon: `http://openweathermap.org/img/wn/${i.weather[0].icon}@2x.png`
+            }
+        )
     })
-    return forecasts
+    console.log('forecasts', forecasts);
+    return forecasts;
 }
 
