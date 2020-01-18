@@ -10,10 +10,8 @@ class WeatherApp extends Component {
         isCurrLoc: true
     }
 
-    async componentDidMount() {
-        await navigator.geolocation.getCurrentPosition(({coords}) => {
-            this.props.loadWeatherData({ lat: coords.latitude, lon: coords.longitude })
-        })
+    componentDidMount() {
+        this.findCurrLoc();
     }
 
     handleFilter = async (ev, val) => {
@@ -23,12 +21,18 @@ class WeatherApp extends Component {
         this.props.loadWeatherData(loc);
     }
 
+    findCurrLoc = async () => {
+        await navigator.geolocation.getCurrentPosition(({coords}) => {
+            this.props.loadWeatherData({ lat: coords.latitude, lon: coords.longitude })
+        })
+    }
+
     render() {
         const { weatherData } = this.props
         const { isCurrLoc } = this.state
         return (
             <section className="weather-app flex column">
-                <SearchBar handleFilter={this.handleFilter} />
+                <SearchBar handleFilter={this.handleFilter} findCurrLoc={this.findCurrLoc} />
                 {weatherData && (
                     <div className="content">
                         <h1 className="city semi">{weatherData.city}</h1>

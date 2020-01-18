@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-export default function LocFilter({ handleFilter }) {
+export default function LocFilter({ handleFilter, findCurrLoc }) {
     const [loc, setLoc] = useState('');
 
     return (
@@ -9,7 +9,7 @@ export default function LocFilter({ handleFilter }) {
                 <input type="text" placeholder="Enter city name" onChange={ev => setLoc(ev.target.value)} />
                 <button type="submit" className="bold">Go</button>
             </form>
-            <button className="my-location semi">My location</button>
+            <button className="my-location semi" onClick={() => findCurrLoc()}>My location</button>
         </section>
     )
 }
