@@ -1,0 +1,29 @@
+.search-bar {
+    margin: 40px 0;
+    width: 100%;
+    form {
+        display: flex;
+        input {
+            flex-grow: 1;
+            padding: 10px 10px 10px 22px;
+            font-size: 18px;
+            border: none;
+            background-color: $clr3;
+            &::placeholder {
+                color: white;
+            }
+        }
+        button {
+            width: 60px;
+            font-size: 1.1em;
+            border-radius: 0 7px 7px 0;
+        }
+    }
+    .my-location {
+        font-size: 1em;
+        margin-right: 20px;
+        background-color: $clr3;
+        padding: 10px;
+        border-radius: 7px;
+    }
+}

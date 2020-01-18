@@ -1,3 +1,14 @@
-body {
-    background-color: pink;
-}
+// SETUP
+@import 'setup/typography';
+@import 'setup/variables';
+
+// BASICS
+@import 'basics/helpers';
+@import 'basics/base';
+
+// VIEWS 
+@import 'views/weather-app';
+
+// COMPONENTS
+@import 'components/weather-list';
+@import 'components/search-bar';

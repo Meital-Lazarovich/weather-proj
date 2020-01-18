@@ -1,54 +1,57 @@
 import React, { Component } from 'react';
-import { loadForecasts } from '../actions/WeatherActions';
+import { loadWeatherData } from '../actions/WeatherActions';
 import { connect } from 'react-redux';
 
+import WeatherList from '../components/WeatherList';
+import SearchBar from '../components/SearchBar';
 
 class WeatherApp extends Component {
+    state = {
+        isCurrLoc: true
+    }
+
     async componentDidMount() {
-        await this.props.loadForecasts('ramat gan')
-        // if (!this.props.forecasts) {
-        //     console.log('no forecasts');
-        // }
-        // else console.log('this.props.forecasts', this.props.forecasts);
+        await navigator.geolocation.getCurrentPosition(({coords}) => {
+            this.props.loadWeatherData({ lat: coords.latitude, lon: coords.longitude })
+        })
+    }
+
+    handleFilter = async (ev, val) => {
+        this.setState({ isCurrLoc: false })
+        ev.preventDefault();
+        const loc = { city: val };
+        this.props.loadWeatherData(loc);
     }
 
     render() {
-        const { forecasts } = this.props
+        const { weatherData } = this.props
+        const { isCurrLoc } = this.state
         return (
-            <>
-                {forecasts && forecasts.map((forecast, idx) => {
-                    return (
-                        <div key={idx}>
-                            <div className="date">
-                                <h2>{forecast.day}</h2>
-                                <h4>{forecast.date}</h4>
-                            </div>
-                            {forecast.weathers.map((weather, idx) => {
-                                return (
-                                    <div key={idx}>
-                                        <img src={weather.icon} alt={weather.desc} title={weather.desc} />
-                                        <p>
-                                            {weather.hour} | {weather.temp}&#176;C | {weather.desc}
-                                        </p>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    )
-                })}
-            </>
+            <section className="weather-app flex column">
+                <SearchBar handleFilter={this.handleFilter} />
+                {weatherData && (
+                    <div className="content">
+                        <h1 className="city semi">{weatherData.city}</h1>
+                        {weatherData.forecasts.map((forecast, idx) => {
+                            return <WeatherList key={idx} forecast={forecast} idx={idx} />
+                        })}
+                    </div>
+                )}
+                {(!weatherData && isCurrLoc) && <h1 className="err">Could not find your location. Please search by city name</h1>}
+                {(!weatherData && !isCurrLoc) && <h1 className="err">Could not find this city. Please check your spelling and try again</h1>}
+            </section>
         )
     }
 }
 
 const mapStateToProps = state => {
     return {
-        forecasts: state.forecasts,
+        weatherData: state.weatherData,
     }
 }
 
 const mapDispatchToProps = {
-    loadForecasts
+    loadWeatherData
 }
 
 export default connect(

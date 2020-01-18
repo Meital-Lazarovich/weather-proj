@@ -1,14 +1,13 @@
 const INITIAL_STATE = {
-    // loc: null,
-    forecasts: null
+    weatherData: null
 }
 
 export default function weatherReducer(state = INITIAL_STATE, action) {
     switch (action.type) {
-        case 'SET_FORECASTS':
+        case 'SET_WEATHER_DATA':
             return {
                 ...state,
-                forecasts: action.forecasts
+                weatherData: action.weatherData
             }
         default:
             return state

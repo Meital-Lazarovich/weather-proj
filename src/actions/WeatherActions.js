@@ -1,12 +1,12 @@
 import WeatherService from '../services/WeatherService'
 
-export const loadForecasts = (loc) => {
+export const loadWeatherData = (loc) => {
     return async (dispatch) => {
-        const forecasts = await WeatherService.getForecasts(loc)
-        return dispatch(setForecasts(forecasts))
+        const weatherData = await WeatherService.getWeatherData(loc)
+        return dispatch(setWeatherData(weatherData))
     }
 }
 
-const setForecasts = (forecasts) => {
-    return { type: 'SET_FORECASTS', forecasts }
+const setWeatherData = (weatherData) => {
+    return { type: 'SET_WEATHER_DATA', weatherData }
 }
